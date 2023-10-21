@@ -52,3 +52,6 @@ local_settings.py
 
 # Ignore user-specific configuration files
 .ssh/
+
+
+email_data.xlsx
