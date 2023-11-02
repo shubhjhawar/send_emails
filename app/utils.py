@@ -28,3 +28,16 @@ def get_email_list(first_name, last_name, company):
     ]
 
     return email_variations
+
+
+def email_body(first_name, company):
+    body = f"Dear {first_name[0].upper()}{first_name[1:]},<br/><br/>"
+    body += "I hope this email finds you well. My name is Shubh, and I'm graduating from Western University. I have done my Bachelor's in Computer Science from SRMIST(Chennai, India).<br/><br/>"
+    body += "During my academic life, I have built numerous projects in various tech stacks such as JS, React, Next, Node, Django, Python etc.<br/>"
+    body += "Please feel free to check out <a href='https://shubh-jhawar-portfolio.vercel.app/'>My Portfolio</a>.<br/>"
+    body += "These are some of the projects I have worked on - <a href='https://pictopiaaa.netlify.app/'>Pictopia (social-media)</a>, <a href='https://beatbox-ekrtmg8cy-shubhjhawar.vercel.app/'>Beatbox (e-commerce)</a><br/>"
+    body += "This one is my personal favourite <a href='https://illusiogen.vercel.app/'>Illusiogen</a>, you can type a prompt and the AI will generate an Image from it.<br/><br/>"
+    body += "Please let me know if there is any opportunity which fits me in. Let me know whenever you are availble next week, so I can show you my work.<br/><br/>"
+    body += "Looking forward to hear from you soon.<br/><br/>"
+    body += "Best regards,<br/>Shubh"
+    return body

@@ -2,10 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.mail import send_mail
-from .utils import get_email_list
+from .utils import get_email_list, email_body
 import pandas as pd
-
-# Create your views here.
+from email.mime.text import MIMEText
+from django.core.mail import EmailMultiAlternatives
 
 class SendEmailView(APIView):
     def post(self, request):
@@ -16,11 +16,16 @@ class SendEmailView(APIView):
         emails = get_email_list(first_name, last_name, company)
         print(emails)
 
-        subject = 'Hello, Django Email Excel!'
-        message = f'Hello {first_name}, please give job.'
-        from_email = 'shubhjhawar78@example.com'  # Replace with the sender's email address
+        subject = "Career - Coffee Chat"
+        html_message = email_body(first_name, company)  # HTML email body
+        from_email = 'shubhjhawar45@gmail.com'  # Replace with the sender's email address
 
-        send_mail(subject, message, from_email, emails, fail_silently=False)
+        for email in emails:
+            print("email sent!")
+            # Use EmailMultiAlternatives to send an HTML email
+            msg = EmailMultiAlternatives(subject, 'Plain text message', from_email, [email])
+            msg.attach_alternative(html_message, "text/html")
+            msg.send()
 
         results = [[first_name, last_name, company]]  # Wrap the data in a list
 
@@ -28,7 +33,6 @@ class SendEmailView(APIView):
         self.update_excel_file(results)
 
         return Response({"success": emails}, status=status.HTTP_200_OK)
-    
 
     def update_excel_file(self, results):
         # Load the existing Excel file
