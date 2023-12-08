@@ -50,3 +50,42 @@ class SendEmailView(APIView):
 
         # Save the updated data to the Excel file
         df.to_excel('email_data.xlsx', index=False)
+
+
+class SendEmailToVeeva(APIView):
+    def post(self, request):
+        people_list = request.data.get('people', [])
+        company_name = request.data.get('company', '')
+
+        if not people_list or not company_name:
+            return Response({"error": "Invalid input data"}, status=status.HTTP_400_BAD_REQUEST)
+
+        results = []
+
+        for person in people_list:
+            first_name = person.get('first_name', '')
+            last_name = person.get('last_name', '')
+
+            # if not first_name or not last_name:
+            #     return Response({"error": "Invalid person data"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # # Generate email address
+            email_address = f"{first_name.lower()}.{last_name.lower()}@{company_name.lower()}.com"
+            subject = "Career Guidance - Coffee Chat"
+            html_message = email_body(first_name, company_name)  # HTML email body
+            from_email = 'shubhjhawar78@gmail.com'  # Replace with the sender's email address
+
+            # Use EmailMultiAlternatives to send an HTML email
+            msg = EmailMultiAlternatives(subject, 'Plain text message', from_email, [email_address])
+            msg.attach_alternative(html_message, "text/html")
+            msg.send()
+            print("email sent!")
+
+            # Append person information to the results list
+            results.append([first_name, last_name, email_address])
+
+        # Update the Excel file with the email information
+        # self.update_excel_file(results)
+        
+
+        return Response({"success": results}, status=status.HTTP_200_OK)
